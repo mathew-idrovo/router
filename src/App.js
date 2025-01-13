@@ -4,6 +4,9 @@ import { HomePage } from './HomePage'
 import { BlogPage } from './BlogPage'
 import { ProfilePage } from './ProfilePage'
 import { BlogPost } from './BlogPost'
+import { LoginPage } from './LoginPage'
+import { AuthProvider, AuthRoute } from './auth'
+import { LogoutPage } from './LogoutPage'
 
 // /#/ -> Home
 // /#/blog
@@ -15,17 +18,34 @@ function App() {
   return (
     <>
       <HashRouter>
-        <Menu />
+        <AuthProvider>
+          <Menu />
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/blog" element={<BlogPage />}>
-            <Route path=":slug" element={<BlogPost />} />
-          </Route>
-
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="*" element={<p>Not found</p>} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<BlogPage />}>
+              <Route path=":slug" element={<BlogPost />} />
+            </Route>
+            <Route
+              path="/profile"
+              element={
+                <AuthRoute>
+                  <ProfilePage />
+                </AuthRoute>
+              }
+            />
+            <Route path="/login" element={<LoginPage />} />{' '}
+            <Route
+              path="/logout"
+              element={
+                <AuthRoute>
+                  <LogoutPage />
+                </AuthRoute>
+              }
+            />
+            <Route path="*" element={<p>Not found</p>} />
+          </Routes>
+        </AuthProvider>
       </HashRouter>
     </>
   )
